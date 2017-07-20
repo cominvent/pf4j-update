@@ -42,6 +42,13 @@ public class UpdateManager {
     protected List<UpdateRepository> repositories;
 
     public PluginManager pluginManager;
+    
+    private UpdateRepositoryFactory updateRepositoryFactory = new UpdateRepositoryFactory() {
+        @Override
+        public UpdateRepository create(String id, URL url) {
+            return new DefaultUpdateRepository(id, url);
+        }
+    };
 
     public UpdateManager(PluginManager pluginManager) {
         this.pluginManager = pluginManager;
@@ -161,7 +168,7 @@ public class UpdateManager {
                 throw new RuntimeException("Repository with id " + id + " already exists");
             }
         }
-        repositories.add(new DefaultUpdateRepository(id, url));
+        repositories.add(getUpdateRepositoryFactory().create(id, url));
     }
 
     /**
@@ -360,4 +367,11 @@ public class UpdateManager {
         return pluginManager.getSystemVersion();
     }
 
+    public UpdateRepositoryFactory getUpdateRepositoryFactory() {
+        return updateRepositoryFactory;
+    }
+
+    public void setUpdateRepositoryFactory(UpdateRepositoryFactory updateRepositoryFactory) {
+        this.updateRepositoryFactory = updateRepositoryFactory;
+    }
 }

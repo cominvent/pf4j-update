@@ -92,8 +92,8 @@ public boolean uninstallPlugin(String id);
 ```
 
 UpdateManager can work with multiple repositories (local and remote).
-All repositories are either defined in a `repositories.json` file or
-provided in UpdateManager's constructor.
+All repositories are either defined in a `repositories.json` file,
+provided in UpdateManager's constructor, or added with `addRepository().
 
 Below I defined two repository: localhost and folder.
 ```json
@@ -130,6 +130,9 @@ If you need even more control, `UpdateManager` accepts repositories in
 constructor and through setters.
 Implement your own UpdateRepository implementation and FileDownloaders to handle
 your own custom repsitory structures, authentication, checksum verifications etc.
+
+With `UpdateManager.setUpdateRepositoryFactory()` you can provide a factory
+that will be used to create UpdateRepository instances from id and URL.
 
 ### Subclass UpdateManager
 For full control, subclass `UpdateManager` and override relevant methods.
