@@ -107,7 +107,7 @@ public class UpdateManager {
             PluginInfo pluginFromRepo = pluginMap.get(installed.getPluginId());
             if (pluginFromRepo != null) {
                 String installedVersion = installed.getDescriptor().getVersion();
-                if (pluginFromRepo.hasUpdate(systemVersion, installedVersion, versionManager)) {
+                if (pluginFromRepo.hasUpdate(systemVersion, installedVersion)) {
                     updates.add(pluginFromRepo);
                 }
             }
@@ -302,7 +302,7 @@ public class UpdateManager {
 
         try {
             if (version == null) {
-                return new URL(plugin.getLastRelease(systemVersion, versionManager).url);
+                return new URL(plugin.getLastRelease(systemVersion).url);
             }
 
             for (PluginRelease release : plugin.releases) {
@@ -336,7 +336,7 @@ public class UpdateManager {
         }
 
         String installedVersion = pluginManager.getPlugin(id).getDescriptor().getVersion();
-        if (!pi.hasUpdate(systemVersion, installedVersion, versionManager)) {
+        if (!pi.hasUpdate(systemVersion, installedVersion)) {
             log.warn("Plugin {} does not have an update available which is compatible with system version", id, systemVersion);
             return false;
         }

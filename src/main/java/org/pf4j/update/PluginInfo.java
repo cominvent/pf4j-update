@@ -15,6 +15,7 @@
  */
 package org.pf4j.update;
 
+import org.pf4j.DefaultVersionManager;
 import org.pf4j.VersionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class PluginInfo implements Serializable, Comparable<PluginInfo> {
 
     private static final Logger log = LoggerFactory.getLogger(PluginInfo.class);
+    private transient static VersionManager versionManager = new DefaultVersionManager();
 
     public String id;
     public String name;
@@ -51,7 +53,7 @@ public class PluginInfo implements Serializable, Comparable<PluginInfo> {
      * @param systemVersion version of host system where plugin will be installed
      * @return PluginRelease which has the highest version number
      */
-    public PluginRelease getLastRelease(String systemVersion, VersionManager versionManager) {
+    public PluginRelease getLastRelease(String systemVersion) {
         if (!lastRelease.containsKey(systemVersion)) {
             for (PluginRelease release : releases) {
                 if (systemVersion.equals("0.0.0") || versionManager.checkVersionConstraint(systemVersion, release.requires)) {
@@ -72,11 +74,10 @@ public class PluginInfo implements Serializable, Comparable<PluginInfo> {
      *
      * @param systemVersion version of host system where plugin will be installed
      * @param installedVersion version that is already installed
-     * @param versionManager version manager
      * @return true if there is a newer version available which is compatible with system
      */
-    public boolean hasUpdate(String systemVersion, String installedVersion, VersionManager versionManager) {
-        PluginRelease last = getLastRelease(systemVersion, versionManager);
+    public boolean hasUpdate(String systemVersion, String installedVersion) {
+        PluginRelease last = getLastRelease(systemVersion);
         return last != null && versionManager.compareVersions(last.version, installedVersion) > 0;
 
     }
@@ -103,4 +104,11 @@ public class PluginInfo implements Serializable, Comparable<PluginInfo> {
 
     }
 
+    /**
+     * Set the VersionManager to use, if you do not use SemVer
+     * @param versionManager an implementation of {@link VersionManager}
+     */
+    public static void setVersionManager(VersionManager versionManager) {
+        PluginInfo.versionManager = versionManager;
+    }
 }
