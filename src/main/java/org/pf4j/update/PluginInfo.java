@@ -32,7 +32,7 @@ import java.util.Map;
 public class PluginInfo implements Serializable, Comparable<PluginInfo> {
 
     private static final Logger log = LoggerFactory.getLogger(PluginInfo.class);
-    private transient static VersionManager versionManager = new DefaultVersionManager();
+    private transient VersionManager versionManager = new DefaultVersionManager();
 
     public String id;
     public String name;
@@ -54,6 +54,21 @@ public class PluginInfo implements Serializable, Comparable<PluginInfo> {
      * @return PluginRelease which has the highest version number
      */
     public PluginRelease getLastRelease(String systemVersion) {
+        if (versionManager == null)
+            throw new IllegalStateException("PluginInfo not initialized properly. Please call setVersionManager()");
+        return getLastRelease(systemVersion, versionManager);
+    }
+
+    /**
+     * Returns the last release version of this plugin for given system version, regardless of release date.
+     *
+     * @param systemVersion version of host system where plugin will be installed
+     * @param versionManager version manager
+     * @return PluginRelease which has the highest version number
+     * @deprecated Use {@link #getLastRelease(String)} instead
+     */
+    @Deprecated
+    public PluginRelease getLastRelease(String systemVersion, VersionManager versionManager) {
         if (!lastRelease.containsKey(systemVersion)) {
             for (PluginRelease release : releases) {
                 if (systemVersion.equals("0.0.0") || versionManager.checkVersionConstraint(systemVersion, release.requires)) {
@@ -79,6 +94,21 @@ public class PluginInfo implements Serializable, Comparable<PluginInfo> {
     public boolean hasUpdate(String systemVersion, String installedVersion) {
         PluginRelease last = getLastRelease(systemVersion);
         return last != null && versionManager.compareVersions(last.version, installedVersion) > 0;
+    }
+
+    /**
+     * Finds whether the newer version of the plugin.
+     *
+     * @param systemVersion version of host system where plugin will be installed
+     * @param installedVersion version that is already installed
+     * @param versionManager version manager
+     * @return true if there is a newer version available which is compatible with system
+     * @deprecated Use {@link #hasUpdate(String, String)} instead
+     */
+    @Deprecated
+    public boolean hasUpdate(String systemVersion, String installedVersion, VersionManager versionManager) {
+        PluginRelease last = getLastRelease(systemVersion, versionManager);
+        return last != null && versionManager.compareVersions(last.version, installedVersion) > 0;
 
     }
 
@@ -93,6 +123,14 @@ public class PluginInfo implements Serializable, Comparable<PluginInfo> {
 
     public void setRepositoryId(String repositoryId) {
         this.repositoryId = repositoryId;
+    }
+
+    /**
+     * Set the VersionManager to use, if you do not use SemVer. This is normally called by the framework
+     * @param versionManager an implementation of {@link VersionManager}
+     */
+    protected void setVersionManager(VersionManager versionManager) {
+        this.versionManager = versionManager;
     }
 
     @Override
@@ -137,13 +175,5 @@ public class PluginInfo implements Serializable, Comparable<PluginInfo> {
                 ", sha512sum='" + sha512sum + '\'' +
                 '}';
         }
-    }
-
-    /**
-     * Set the VersionManager to use, if you do not use SemVer
-     * @param versionManager an implementation of {@link VersionManager}
-     */
-    public static void setVersionManager(VersionManager versionManager) {
-        PluginInfo.versionManager = versionManager;
     }
 }

@@ -69,7 +69,6 @@ public class InstallAndDownloadTest {
 
     private PluginManager pluginManager;
     private UpdateManager updateManager;
-    private VersionManager versionManager;
 
     private String systemVersion;
     private URL repoUrl;
@@ -91,9 +90,7 @@ public class InstallAndDownloadTest {
         pluginManager = new PropertiesPluginManager(pluginFolderDir);
         systemVersion = "1.8.0";
         pluginManager.setSystemVersion(systemVersion); // Only p2 and p3 are valid
-
-        versionManager = pluginManager.getVersionManager();
-
+        
         repoUrl = new URL("file:" + downloadRepoDir.toAbsolutePath().toString() + "/");
         UpdateRepository local = new DefaultUpdateRepository("local", repoUrl);
         p1.create();
@@ -114,16 +111,16 @@ public class InstallAndDownloadTest {
     public void findRightVersions() {
         assertEquals(1, updateManager.repositories.size());
         assertEquals(3, updateManager.getPlugins().size());
-        assertEquals("2.0.0", updateManager.getPluginsMap().get("myPlugin").getLastRelease(systemVersion, versionManager).version);
-        assertEquals("3.0.1", updateManager.getPluginsMap().get("other").getLastRelease(systemVersion, versionManager).version);
+        assertEquals("2.0.0", updateManager.getPluginsMap().get("myPlugin").getLastRelease(systemVersion).version);
+        assertEquals("3.0.1", updateManager.getPluginsMap().get("other").getLastRelease(systemVersion).version);
     }
 
     @Test
     public void tolerantDateParsing() throws Exception {
-        assertEquals(dateFor("2016-12-31"), updateManager.getPluginsMap().get("myPlugin").getLastRelease(systemVersion, versionManager).date);
-        assertTrue(updateManager.getPluginsMap().get("other").getLastRelease(systemVersion, versionManager).date.after(dateFor("2017-01-31")));
-        assertTrue(updateManager.getPluginsMap().get("other").getLastRelease(systemVersion, versionManager).date.before(dateFor("2017-02-01")));
-        assertEquals(dateFor("1970-01-01"), updateManager.getPluginsMap().get("wrongDate").getLastRelease(systemVersion, versionManager).date);
+        assertEquals(dateFor("2016-12-31"), updateManager.getPluginsMap().get("myPlugin").getLastRelease(systemVersion).date);
+        assertTrue(updateManager.getPluginsMap().get("other").getLastRelease(systemVersion).date.after(dateFor("2017-01-31")));
+        assertTrue(updateManager.getPluginsMap().get("other").getLastRelease(systemVersion).date.before(dateFor("2017-02-01")));
+        assertEquals(dateFor("1970-01-01"), updateManager.getPluginsMap().get("wrongDate").getLastRelease(systemVersion).date);
     }
 
     @Test

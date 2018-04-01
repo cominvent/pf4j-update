@@ -104,6 +104,7 @@ public class DefaultUpdateRepository implements UpdateRepository {
                 }
             }
             p.setRepositoryId(getId());
+            p.setVersionManager(UpdateManager.getVersionManager());
             plugins.put(p.id, p);
         }
         log.debug("Found {} plugins in repository '{}'", plugins.size(), id);

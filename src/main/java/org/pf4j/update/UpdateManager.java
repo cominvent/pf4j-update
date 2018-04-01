@@ -41,9 +41,9 @@ import java.util.*;
 public class UpdateManager {
 
     private static final Logger log = LoggerFactory.getLogger(UpdateManager.class);
+    private static VersionManager versionManager;
 
     private PluginManager pluginManager;
-    private VersionManager versionManager;
     private String systemVersion;
     private Path repositoriesJson;
 
@@ -389,4 +389,11 @@ public class UpdateManager {
         }
     }
 
+    /**
+     * Gets the version manager in use in the system
+     * @return instance of VersionManager
+     */
+    public static VersionManager getVersionManager() {
+        return versionManager;
+    }
 }
