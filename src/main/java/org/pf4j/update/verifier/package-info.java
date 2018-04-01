@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.pf4j.update.util;
-
-import org.pf4j.Plugin;
-import org.pf4j.PluginWrapper;
-
-/**
- * @author Mario Franco
+ 
+/** 
+ * Implementations of {@link org.pf4j.update.FileVerifier} interface.
+ * An verifier implementation will do a specific kind of check on the downloaded plugin file
+ * in orer to verify that it is complete, safe, compliant or whatever needs to be verified.
  */
-public class NopPlugin extends Plugin {
+package org.pf4j.update.verifier;
 
-    public NopPlugin(PluginWrapper wrapper) {
-        super(wrapper);
-    }
 
-}

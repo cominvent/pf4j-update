@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Decebal Suiu
+ * Copyright (C) 2012-present the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,15 +84,4 @@ public class FileDownloadTest {
     public void unsupportedProtocol() throws Exception {
         downloader.downloadFile(new URL("jar:file:!/myfile.jar"));
     }
-
-    @Test(expected = PluginException.class)
-    public void emptyFileDownloaded() throws Exception {
-        downloader.validateDownload(null, emptyFile);
-    }
-
-    @Test(expected = PluginException.class)
-    public void notRegularFile() throws Exception {
-        downloader.validateDownload(null, updateRepoDir);
-    }
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Decebal Suiu
+ * Copyright (C) 2012-present the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,5 +37,4 @@ public interface FileDownloader {
      * @throws PluginException in case of other problems, such as unsupported protocol
      */
     Path downloadFile(URL fileUrl) throws PluginException, IOException;
-
 }

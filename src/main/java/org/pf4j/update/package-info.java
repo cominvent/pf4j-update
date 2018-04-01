@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.pf4j.update.util;
-
-import org.pf4j.Plugin;
-import org.pf4j.PluginWrapper;
-
-/**
- * @author Mario Franco
+ 
+/** 
+ * This is the pf4j-update sub project which implements a plugin update mechanism for
+ * Plugin Framework for Java.
  */
-public class NopPlugin extends Plugin {
+package org.pf4j.update;
 
-    public NopPlugin(PluginWrapper wrapper) {
-        super(wrapper);
-    }
 
-}

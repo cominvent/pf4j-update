@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.pf4j.update.util;
+package org.pf4j.update;
 
-import org.pf4j.Plugin;
-import org.pf4j.PluginWrapper;
+import org.pf4j.PluginException;
 
 /**
- * @author Mario Franco
+ * Marker exception for plugin verification failure
  */
-public class NopPlugin extends Plugin {
-
-    public NopPlugin(PluginWrapper wrapper) {
-        super(wrapper);
+public class VerifyException extends PluginException {
+    public VerifyException(String message) {
+        super(message);
     }
 
+    public VerifyException(Throwable cause, String message, Object... args) {
+        super(cause, message, args);
+    }
+
+    public VerifyException(String message, Object... args) {
+        super(message, args);
+    }
 }
